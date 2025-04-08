@@ -1,0 +1,12 @@
+{
+	"name": "@examples/worker-with-public-dir",
+	"private": true,
+	"scripts": {
+		"predev": "cloudflare-workers-build-time-fs-assets-polyfilling --assets public",
+		"dev": "wrangler dev"
+	},
+	"devDependencies": {
+		"cloudflare-workers-build-time-fs-assets-polyfilling": "../../package",
+		"wrangler": "^4.8.0"
+	}
+}

@@ -1,32 +1,24 @@
 {
-	"name": "cloudflare-workers-build-time-fs-assets-polyfilling",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
-	"bin": "dist/index.js",
-	"files": [
-		"templates"
-	],
+	"name": "cloudflare-workers-build-time-fs-assets-polyfilling-repo",
+	"private": true,
 	"scripts": {
-		"build": "tsup",
-		"build:watch": "tsup --watch src",
 		"prettier:check": "prettier --check .",
 		"prettier:fix": "prettier --write .",
-		"lint:check": "eslint src",
-		"lint:fix": "eslint src --fix"
+		"lint:check": "eslint .",
+		"lint:fix": "eslint . --fix"
 	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
+	"workspaces": [
+		"package",
+		"examples/*"
+	],
 	"devDependencies": {
 		"@eslint/js": "^9.24.0",
-		"@types/node": "^22.14.0",
-		"esbuild": "^0.25.2",
 		"eslint": "^9.24.0",
 		"globals": "^16.0.0",
 		"prettier": "^3.5.3",
-		"tsup": "^8.4.0",
-		"typescript": "^5.8.3",
 		"typescript-eslint": "^8.29.0"
+	},
+	"engines": {
+		"node": ">=23"
 	}
 }

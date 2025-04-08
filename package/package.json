@@ -1,0 +1,21 @@
+{
+	"name": "cloudflare-workers-build-time-fs-assets-polyfilling",
+	"version": "0.0.0",
+	"description": "",
+	"main": "index.js",
+	"bin": "dist/index.js",
+	"files": [
+		"templates"
+	],
+	"scripts": {
+		"build": "tsup",
+		"build:watch": "tsup --watch src"
+	},
+	"devDependencies": {
+		"@types/node": "^22.14.0",
+		"esbuild": "^0.25.2",
+		"eslint": "^9.24.0",
+		"tsup": "^8.4.0",
+		"typescript": "^5.8.3"
+	}
+}

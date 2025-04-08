@@ -47,7 +47,7 @@ async function findInDirentLikes(path: string) {
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const getManifest: (path: string) => any[] = // @ts-ignore
-	(await import(`../../manifests/index.mjs`)).default;
+		(await import(`../../manifests/index.mjs`)).default;
 
 	const manifest = getManifest(path);
 
