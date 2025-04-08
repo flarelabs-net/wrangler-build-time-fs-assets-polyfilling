@@ -4,6 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"bin": "dist/index.js",
+	"files": [
+		"templates"
+	],
 	"scripts": {
 		"build": "tsup",
 		"build:watch": "tsup --watch src",
