@@ -1,5 +1,5 @@
 {
-	"name": "cloudflare-workers-build-time-fs-assets-polyfilling-repo",
+	"name": "wrangler-build-time-fs-assets-polyfilling-repo",
 	"private": true,
 	"scripts": {
 		"prettier:check": "prettier --check .",

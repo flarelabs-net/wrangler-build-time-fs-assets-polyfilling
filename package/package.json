@@ -1,5 +1,5 @@
 {
-	"name": "cloudflare-workers-build-time-fs-assets-polyfilling",
+	"name": "wrangler-build-time-fs-assets-polyfilling",
 	"version": "0.0.0",
 	"description": "",
 	"main": "index.js",
