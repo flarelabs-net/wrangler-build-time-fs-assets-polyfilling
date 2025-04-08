@@ -3,15 +3,13 @@
 	"name": "cwbtfap-test",
 	"main": "src/index.js",
 	"compatibility_date": "2025-04-07",
-	"compatibility_flags": [
-		"nodejs_compat"
-	],
+	"compatibility_flags": ["nodejs_compat"],
 	"assets": {
 		"binding": "ASSETS",
-		"directory": "./public"
+		"directory": "./public",
 	},
 	// TODO: the package should automatically populate these
 	"alias": {
-		"node:fs": "./.wrangler/fs-assets-polyfilling/polyfills/node/fs.ts"
+		"node:fs": "./.wrangler/fs-assets-polyfilling/polyfills/node/fs.ts",
 	},
 }

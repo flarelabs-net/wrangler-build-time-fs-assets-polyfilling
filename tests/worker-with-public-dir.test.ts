@@ -17,7 +17,7 @@ describe("readdir", () => {
 	it("works as intended", async () => {
 		assert(example, "testing error - example should be defined");
 
-		const html = await (await fetch(example.url)).text();
+		const html = await (await fetch(`${example.url}/readdir`)).text();
 
 		const document = new JSDOM(html).window.document;
 
@@ -35,11 +35,11 @@ describe("readdir", () => {
 describe("exists and existsSync", () => {
 	describe("existsSync", () => {
 		it("works as intended", async () => {
-			const html = await (await fetch(example.url)).text();
+			const html = await (await fetch(`${example.url}/existsSync`)).text();
 			const document = new JSDOM(html).window.document;
 			const renderedReaddirFiles = [
 				...document.querySelectorAll(
-					'[test-id^="exists-sync-checks-list-file-"]'
+					'[test-id^="existsSync-checks-list-file-"]'
 				),
 			].map((li) => li.textContent?.trim());
 			assert.deepStrictEqual(renderedReaddirFiles, [
@@ -55,7 +55,7 @@ describe("exists and existsSync", () => {
 
 	describe("exists", () => {
 		it("works as intended", async () => {
-			const html = await (await fetch(example.url)).text();
+			const html = await (await fetch(`${example.url}/exists`)).text();
 			const document = new JSDOM(html).window.document;
 			const renderedReaddirFiles = [
 				...document.querySelectorAll('[test-id^="exists-checks-list-file-"]'),
