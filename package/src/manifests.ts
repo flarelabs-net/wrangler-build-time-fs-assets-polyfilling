@@ -31,7 +31,7 @@ export async function generateManifestsIndex() {
 
 	const script = `${filesData
 		.map(({ file, manifestName }) => `import ${manifestName} from "${file}";`)
-		.join("\n")}\n\nexport default function getManifest(path) {\n${filesData
+		.join("\n")}\n\nexport function getManifest(path) {\n${filesData
 		.map(
 			({ path, manifestName }) =>
 				` if (path === "${path}") return ${manifestName};`

@@ -2,7 +2,7 @@ import process from "node:process";
 import assert from "node:assert";
 import { spawn } from "node:child_process";
 
-type Example = {
+export type Example = {
 	url: string;
 	kill: () => void;
 };

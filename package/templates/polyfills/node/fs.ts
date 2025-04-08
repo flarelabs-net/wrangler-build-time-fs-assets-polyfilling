@@ -1,6 +1,12 @@
 import promises from "fs/promises";
 import type fs from "fs";
 
+// @ts-expect-error -- this is solved at runtime
+import * as manifestIndex from "../../manifests/index.mjs";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getManifest: (path: string) => any[] = manifestIndex.getManifest;
+
 export function readdir(
 	...args: Parameters<typeof fs.readdir>
 ): ReturnType<typeof fs.readdir> {
@@ -12,44 +18,39 @@ export function readdir(
 		throw new Error("fs#readdir please call readdir with withFileTypes true");
 	}
 
-	findInDirentLikes(`${path}`)
-		.then((result) => {
-			const results =
-				!result || result.type !== "directory"
-					? []
-					: // eslint-disable-next-line @typescript-eslint/no-explicit-any
-						result.children.map((c: any) => ({
-							name: c.name,
-							parentPath: c.parentPath,
-							path: c.path,
-							isFile: () => c.type === "file",
-							isDirectory: () => c.type === "directory",
-						}));
+	try {
+		const targetDirent = findInDirentLikes(`${path}`);
+		const results =
+			!targetDirent || targetDirent.type !== "directory"
+				? []
+				: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+					targetDirent.children.map((c: any) => ({
+						name: c.name,
+						parentPath: c.parentPath,
+						path: c.path,
+						isFile: () => c.type === "file",
+						isDirectory: () => c.type === "directory",
+					}));
 
-			callback?.(null, results);
-		})
-		.catch((err) => {
-			if (err instanceof Error && err.message === "Assets Manifest not found") {
-				return callback?.(
-					new Error(`ENOENT: no such file or directory, scandir ${path}`),
-					[]
-				);
-			}
-			callback?.(err, []);
-		});
+		callback?.(null, results);
+	} catch (err) {
+		if (err instanceof Error && err.message === "Assets Manifest not found") {
+			return callback?.(
+				new Error(`ENOENT: no such file or directory, scandir ${path}`),
+				[]
+			);
+		}
+		callback?.((err ?? null) as NodeJS.ErrnoException | null, []);
+	}
 }
 
-async function findInDirentLikes(path: string) {
+function findInDirentLikes(path: string) {
 	// remove the leading `/`
 	path = path.slice(1);
 
 	const paths = path.split("/");
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const getManifest: (path: string) => any[] = // @ts-ignore
-		(await import(`../../manifests/index.mjs`)).default;
-
-	const manifest = getManifest(path);
+	const manifest = getManifest(paths[0]);
 
 	if (!manifest) {
 		throw new Error("Assets Manifest not found");
@@ -68,7 +69,7 @@ async function findInDirentLikes(path: string) {
 }
 
 export function exists(
-	args: Parameters<typeof fs.exists>
+	...args: Parameters<typeof fs.exists>
 ): ReturnType<typeof fs.exists> {
 	const [path, callback] = args;
 	const result = existsImpl(path);
@@ -76,7 +77,7 @@ export function exists(
 }
 
 export function existsSync(
-	args: Parameters<typeof fs.existsSync>
+	...args: Parameters<typeof fs.existsSync>
 ): ReturnType<typeof fs.existsSync> {
 	const [path] = args;
 	const result = existsImpl(path);

@@ -1,4 +1,4 @@
-import { readdir } from 'node:fs';
+import { existsSync, exists, readdir } from 'node:fs';
 
 export default {
 	async fetch() {
@@ -7,6 +7,25 @@ export default {
 				resolve(files);
 			})
 		});
+
+		const filesToCheckExistenceOf = [
+			'/public/file1.md',
+			'/public/file2.md',
+			'/public/file3.md',
+			'/public/dir/file1.md',
+			'/public/dir/file2.md',
+			'/public/dir/file3.md',
+		];
+
+		const existsSyncChecks = filesToCheckExistenceOf.map(
+			file => ({ file, result: existsSync(file) })
+		);
+
+		const existsChecks = await Promise.all(filesToCheckExistenceOf.map(
+			file => new Promise(resolve => {
+				exists(file, (result) => resolve({ file, result }))
+			})
+		));
 
 		return new Response(`
 			<!DOCTYPE html>
@@ -23,6 +42,17 @@ export default {
 				<p><code>readdir</code> run against <code>'/public'</code> results in: </p>
 				<ul>
 					${publicFiles.map((file, i) => `<li test-id="readdir-public-list-file-${i}">${file.name} (which is a ${file.isFile() ? 'file' : 'directory'})</li>`).join('')}
+				</ul>
+				<h2><code>exists</code> and <code>existsSync</code></h2>
+				<h3><code>existsSync</code></h3>
+				<p>various checks run with <code>existsSync</code></p>
+				<ul>
+					${existsSyncChecks.map(({ file, result }, i) => `<li test-id="exists-sync-checks-list-file-${i}">calling <code>existsSync("${file}")</code> returns <code>${result}</code>`).join('')}
+				</ul>
+				<h3><code>exists</code></h3>
+				<p>various checks run with <code>exists</code></p>
+				<ul>
+					${existsChecks.map(({ file, result }, i) => `<li test-id="exists-checks-list-file-${i}">calling <code>existsSync("${file}")</code> returns <code>${result}</code>`).join('')}
 				</ul>
 			</body>
 			</html>
