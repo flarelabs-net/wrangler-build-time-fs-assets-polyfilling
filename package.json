@@ -2,6 +2,7 @@
 	"name": "wrangler-build-time-fs-assets-polyfilling-repo",
 	"private": true,
 	"scripts": {
+		"postinstall": "npm run build && npm i --ignore-scripts",
 		"build": "npm run build --workspace package",
 		"prettier:check": "prettier --check .",
 		"prettier:fix": "prettier --write .",
