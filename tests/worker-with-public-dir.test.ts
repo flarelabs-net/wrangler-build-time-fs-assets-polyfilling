@@ -27,11 +27,7 @@ describe("node:fs", () => {
 				?.textContent?.trim();
 			assert.strictEqual(
 				renderedReaddirFiles,
-				[
-					"dir (which is a directory)",
-					"file1.md (which is a file)",
-					"file2.md (which is a file)",
-				].join("")
+				["dir", "file1.md", "file2.md"].join("")
 			);
 		});
 
@@ -125,11 +121,7 @@ describe("node:fs/promises", () => {
 				?.textContent?.trim();
 			assert.strictEqual(
 				renderedReaddirFiles,
-				[
-					"dir (which is a directory)",
-					"file1.md (which is a file)",
-					"file2.md (which is a file)",
-				].join("")
+				["dir", "file1.md", "file2.md"].join("")
 			);
 		});
 

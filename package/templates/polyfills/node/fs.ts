@@ -10,7 +10,11 @@ const getManifest: (path: string) => any[] = manifestIndex.getManifest;
 export function readdir(
 	...args: Parameters<typeof fs.readdir>
 ): ReturnType<typeof fs.readdir> {
-	const [path, options, callback] = args;
+	const path = args[0];
+	const options: Partial<Parameters<typeof fs.readdir>[1]> =
+		typeof args[1] === "function" ? {} : args[1];
+	const callback = typeof args[1] === "function" ? args[1] : args[2];
+
 	const withFileTypes = !!options?.withFileTypes;
 
 	try {

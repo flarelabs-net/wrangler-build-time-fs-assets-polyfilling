@@ -6,7 +6,7 @@ export async function getPageResponse() {
 
 	const reads = await Promise.all(
 		dirsToRead.map((dir) =>
-			readdir(dir, { withFileTypes: true })
+			readdir(dir)
 				.then((files) => ({
 					dir,
 					files,
@@ -29,10 +29,7 @@ export async function getPageResponse() {
 						${
 							files
 								? `<pre style="color: gray" test-id="promises-readdir-content-${dir}"><ul>${files
-										.map(
-											(file) =>
-												`<li>${file.name} (which is a ${file.isFile() ? "file" : "directory"})</li>`
-										)
+										.map((file) => `<li>${file}</li>`)
 										.join("")}</ul></pre>`
 								: `<pre style="color: red" test-id="promises-readdir-error-${dir}">${error}</pre>`
 						}
