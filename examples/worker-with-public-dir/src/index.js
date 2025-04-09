@@ -1,6 +1,7 @@
 import { getExistsPageResponse } from "./pages/exists";
 import { getExistsSyncPageResponse } from "./pages/existsSync";
 import { getReaddirPageResponse } from "./pages/readdir";
+import { getPromisesReaddirPageResponse } from "./pages/promises/readdir";
 import { getHtmlResponse } from "./utils/html";
 
 const fsFunctions = [
@@ -15,6 +16,10 @@ const fsFunctions = [
 	{
 		name: "existsSync",
 		getPageResponse: getExistsSyncPageResponse,
+	},
+	{
+		name: "promises/readdir",
+		getPageResponse: getPromisesReaddirPageResponse,
 	},
 ];
 

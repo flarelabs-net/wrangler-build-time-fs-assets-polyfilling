@@ -11,5 +11,6 @@
 	// TODO: the package should automatically populate these
 	"alias": {
 		"node:fs": "./.wrangler/fs-assets-polyfilling/polyfills/node/fs.ts",
+		"node:fs/promises": "./.wrangler/fs-assets-polyfilling/polyfills/node/fs/promises.ts",
 	},
 }
