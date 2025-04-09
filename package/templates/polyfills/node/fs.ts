@@ -19,7 +19,7 @@ export function readdir(
 	}
 
 	try {
-		const targetDirent = findInDirentLikes(`${path}`);
+		const targetDirent = __findInDirentLikes(`${path}`);
 		const results =
 			!targetDirent || targetDirent.type !== "directory"
 				? []
@@ -44,7 +44,7 @@ export function readdir(
 	}
 }
 
-function findInDirentLikes(path: string) {
+export function __findInDirentLikes(path: string) {
 	// remove the leading `/`
 	path = path.slice(1);
 
@@ -85,7 +85,7 @@ export function existsSync(
 }
 
 function existsImpl(path: fs.PathLike) {
-	return !!findInDirentLikes(`${path}`);
+	return !!__findInDirentLikes(`${path}`);
 }
 
 export function realpathSync() {

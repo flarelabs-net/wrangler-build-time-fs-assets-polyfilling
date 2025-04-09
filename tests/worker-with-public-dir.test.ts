@@ -97,4 +97,67 @@ describe("node:fs/promises", () => {
 			]);
 		});
 	});
+
+	describe("readFile", () => {
+		it("reads the content of existing files", async () => {
+			assert(example, "testing error - example should be defined");
+
+			const html = await (
+				await fetch(`${example.url}/promises/readFile`)
+			).text();
+
+			const document = new JSDOM(html).window.document;
+
+			const file1Content = document
+				.querySelector('[test-id="promises-readfile-content-/public/file1.md"]')
+				?.textContent?.trim();
+			assert.strictEqual(file1Content, "# File 1");
+			const file2Content = document
+				.querySelector('[test-id="promises-readfile-content-/public/file2.md"]')
+				?.textContent?.trim();
+			assert.strictEqual(file2Content, "# File 2");
+			const file3Content = document
+				.querySelector(
+					'[test-id="promises-readfile-content-/public/dir/file3.md"]'
+				)
+				?.textContent?.trim();
+			assert.strictEqual(file3Content, "# File 3");
+		});
+
+		it("errors when run against non-existing files", async () => {
+			assert(example, "testing error - example should be defined");
+
+			const html = await (
+				await fetch(`${example.url}/promises/readFile`)
+			).text();
+
+			const document = new JSDOM(html).window.document;
+
+			const file3Content = document
+				.querySelector('[test-id="promises-readfile-error-/public/file3.md"]')
+				?.textContent?.trim();
+			assert.strictEqual(
+				file3Content,
+				"ENOENT: no such file or directory, open '/public/file3.md'"
+			);
+		});
+
+		it("errors when run against directories", async () => {
+			assert(example, "testing error - example should be defined");
+
+			const html = await (
+				await fetch(`${example.url}/promises/readFile`)
+			).text();
+
+			const document = new JSDOM(html).window.document;
+
+			const file3Content = document
+				.querySelector('[test-id="promises-readfile-error-/public"]')
+				?.textContent?.trim();
+			assert.strictEqual(
+				file3Content,
+				"EISDIR: illegal operation on a directory, read"
+			);
+		});
+	});
 });

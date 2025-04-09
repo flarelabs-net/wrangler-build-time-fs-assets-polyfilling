@@ -11,9 +11,10 @@ export async function savePolyfills() {
 	await copyTemplateFileOver("node/fs/promises.ts");
 }
 
-// Note: I am not using `cp` from `node:fs` just because I imagined that we might
-//       need to tweak the template files on build... it might actually not be
-//       necessary at all
+// Note: I am not using `cp` from `node:fs` just because I think we might want
+//       need to tweak the template files on build at some point, for example
+//       replacing occurrences of `ASSETS` with the name of the user's assets
+//       binding (if different from `ASSETS`)
 async function copyTemplateFileOver(templatePath: string): Promise<void> {
 	const templateContent = await readFile(
 		`${polyfillTemplatesDir}/${templatePath}`,
