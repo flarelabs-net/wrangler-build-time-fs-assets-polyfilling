@@ -34,6 +34,10 @@ function generateDirentLikeBase(
 }
 
 export async function collectAndCopyAssets(path: string): Promise<void> {
+	if (path.startsWith("./")) {
+		path = path.slice("./".length);
+	}
+
 	if (path.includes("/")) {
 		// TODO: add support for this
 		throw new Error("Nested paths as assets not supported");
