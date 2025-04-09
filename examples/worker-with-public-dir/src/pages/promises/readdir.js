@@ -1,7 +1,7 @@
 import { readdir } from "node:fs/promises";
 import { getHtmlResponse } from "../../utils/html";
 
-export async function getPromisesReaddirPageResponse() {
+export async function getPageResponse() {
 	const publicFiles = await readdir("/public", { withFileTypes: true });
 
 	return getHtmlResponse(

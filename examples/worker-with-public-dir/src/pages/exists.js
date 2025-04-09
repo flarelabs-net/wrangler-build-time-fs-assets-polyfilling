@@ -1,7 +1,7 @@
 import { exists } from "node:fs";
 import { getHtmlResponse } from "../utils/html";
 
-export async function getExistsPageResponse() {
+export async function getPageResponse() {
 	const filesToCheckExistenceOf = [
 		"/public/file1.md",
 		"/public/file2.md",

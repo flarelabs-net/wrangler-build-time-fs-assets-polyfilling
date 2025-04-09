@@ -1,30 +1,25 @@
-import { getExistsPageResponse } from "./pages/exists";
-import { getExistsSyncPageResponse } from "./pages/existsSync";
-import { getReaddirPageResponse } from "./pages/readdir";
-import { getPromisesReaddirPageResponse } from "./pages/promises/readdir";
-import { getPromisesReadFilePageResponse } from "./pages/promises/readFile";
 import { getHtmlResponse } from "./utils/html";
 
 const fsFunctions = [
 	{
 		name: "readdir",
-		getPageResponse: getReaddirPageResponse,
+		getPageModule: () => import("./pages/readdir"),
 	},
 	{
 		name: "exists",
-		getPageResponse: getExistsPageResponse,
+		getPageModule: () => import("./pages/exists"),
 	},
 	{
 		name: "existsSync",
-		getPageResponse: getExistsSyncPageResponse,
+		getPageModule: () => import("./pages/existsSync"),
 	},
 	{
 		name: "promises/readdir",
-		getPageResponse: getPromisesReaddirPageResponse,
+		getPageModule: () => import("./pages/promises/readdir"),
 	},
 	{
 		name: "promises/readFile",
-		getPageResponse: getPromisesReadFilePageResponse,
+		getPageModule: () => import("./pages/promises/readFile"),
 	},
 ];
 
@@ -34,7 +29,8 @@ export default {
 
 		for (const fn of fsFunctions) {
 			if (pathname === `/${fn.name}`) {
-				return fn.getPageResponse();
+				const fnPageModule = await fn.getPageModule();
+				return fnPageModule.getPageResponse();
 			}
 		}
 

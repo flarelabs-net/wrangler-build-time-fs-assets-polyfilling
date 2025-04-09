@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { getHtmlResponse } from "../../utils/html";
 
-export async function getPromisesReadFilePageResponse() {
+export async function getPageResponse() {
 	const filesToRead = [
 		"/public/file1.md",
 		"/public/file2.md",
