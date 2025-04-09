@@ -26,8 +26,6 @@ async function main() {
 
 	await generateManifestsIndex();
 
-	// TODO: copy polyills under ./.wrangler/fs-assets-polyfilling/node-polyfills/ and tweak them
-	// and use importable env instead of global[cloudflareContextSymbol]
 	await savePolyfills();
 }
 
