@@ -1,5 +1,6 @@
-import promises from "./fs/promises";
 import type fs from "node:fs";
+import assert from "node:assert";
+import promises from "./fs/promises";
 
 // @ts-expect-error -- this is solved at runtime
 import * as manifestIndex from "../../manifests/index.mjs";
@@ -37,7 +38,7 @@ export function readdir(
 				path: child.path,
 				isFile: () => child.type === "file",
 				isDirectory: () => child.type === "directory",
-					}));
+			}));
 
 		callback?.(null, results);
 	} catch (err) {
@@ -52,8 +53,8 @@ export function readdir(
 }
 
 export function __findInDirentLikes(path: string) {
-	// remove the leading `/`
-	path = path.slice(1);
+	// remove the potential leading `/`
+	if (path.startsWith("/")) path = path.slice(1);
 
 	const paths = path.split("/");
 
