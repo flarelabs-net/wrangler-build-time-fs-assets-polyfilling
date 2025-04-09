@@ -1,5 +1,4 @@
 import type fs from "node:fs";
-import assert from "node:assert";
 import promises from "./fs/promises";
 
 // @ts-expect-error -- this is solved at runtime
