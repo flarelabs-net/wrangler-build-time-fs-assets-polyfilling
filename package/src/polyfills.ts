@@ -10,9 +10,7 @@ export async function savePolyfills() {
 		`${polyfillTemplatesDir}/node/fs.ts`,
 		"utf8"
 	);
-	// console.log(`\x1b[35m${fs}\x1b[0m`);
 
-	// baseOutputPolyfillsDir
 	await writeFile(
 		`${baseOutputPolyfillsDir}/node/fs.ts`,
 		fsTemplateContent,
