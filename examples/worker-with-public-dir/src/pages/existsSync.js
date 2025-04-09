@@ -17,7 +17,6 @@ export async function getExistsSyncPageResponse() {
 	}));
 
 	return getHtmlResponse(
-		"existsSync",
 		`
 			<h1><code>existsSync</code></h1>
 			<p>various checks run with <code>existsSync</code></p>

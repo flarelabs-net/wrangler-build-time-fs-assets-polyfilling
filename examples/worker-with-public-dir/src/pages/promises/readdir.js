@@ -5,7 +5,6 @@ export async function getPromisesReaddirPageResponse() {
 	const publicFiles = await readdir("/public", { withFileTypes: true });
 
 	return getHtmlResponse(
-		"readdir from node:fs/promises",
 		`
 			<h1><code>readdir</code> from <code>node:fs/promises</code></h1>
 			<p><code>readdir</code> run against <code>'/public'</code> results in: </p>

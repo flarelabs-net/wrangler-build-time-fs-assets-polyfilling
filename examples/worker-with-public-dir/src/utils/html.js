@@ -1,4 +1,4 @@
-export function getHtmlResponse(title, body) {
+export function getHtmlResponse(body) {
 	return new Response(
 		`
 			<!DOCTYPE html>
@@ -6,7 +6,7 @@ export function getHtmlResponse(title, body) {
 			<head>
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<title>${title}</title>
+				<title>Worker With Public Dir</title>
 			</head>
 			<body>${body}</body>
 			</html>

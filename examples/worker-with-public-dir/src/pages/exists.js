@@ -21,7 +21,6 @@ export async function getExistsPageResponse() {
 	);
 
 	return getHtmlResponse(
-		"exists",
 		`
 			<h1><code>exists</code></h1>
 			<p>various checks run with <code>exists</code></p>

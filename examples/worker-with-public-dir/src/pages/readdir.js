@@ -9,7 +9,6 @@ export async function getReaddirPageResponse() {
 	});
 
 	return getHtmlResponse(
-		"readdir from node:fs",
 		`
 			<h1><code>readdir</code> from <code>node:fs</code></h1>
 			<p><code>readdir</code> run against <code>'/public'</code> results in: </p>

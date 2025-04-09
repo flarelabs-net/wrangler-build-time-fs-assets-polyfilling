@@ -34,7 +34,6 @@ export default {
 		}
 
 		return getHtmlResponse(
-			"Worker with Public dir",
 			`
 				<h1>Worker with Public dir</h1>
 				<p>This is a worker that generates server side HTML using the fs build time polyfills against a <code>/public</code> directory</p>
