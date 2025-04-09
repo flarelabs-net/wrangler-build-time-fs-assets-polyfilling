@@ -1,6 +1,6 @@
 {
 	"name": "@dario-hacking/wrangler-build-time-fs-assets-polyfilling",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"description": "",
 	"main": "index.js",
 	"bin": "dist/index.js",
