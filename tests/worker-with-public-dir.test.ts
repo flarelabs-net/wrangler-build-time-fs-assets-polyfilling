@@ -15,21 +15,56 @@ after(() => {
 
 describe("node:fs", () => {
 	describe("readdir", () => {
-		it("works as intended", async () => {
+		it("lists the content of an existing directory", async () => {
 			assert(example, "testing error - example should be defined");
 
 			const html = await (await fetch(`${example.url}/readdir`)).text();
 
 			const document = new JSDOM(html).window.document;
 
-			const renderedReaddirFiles = [
-				...document.querySelectorAll('[test-id^="readdir-public-list-file-"]'),
-			].map((li) => li.textContent?.trim());
-			assert.deepStrictEqual(renderedReaddirFiles, [
-				"dir (which is a directory)",
-				"file1.md (which is a file)",
-				"file2.md (which is a file)",
-			]);
+			const renderedReaddirFiles = document
+				.querySelector('[test-id="readdir-content-/public"]')
+				?.textContent?.trim();
+			assert.strictEqual(
+				renderedReaddirFiles,
+				[
+					"dir (which is a directory)",
+					"file1.md (which is a file)",
+					"file2.md (which is a file)",
+				].join("")
+			);
+		});
+
+		it("errors on non-existing directories", async () => {
+			assert(example, "testing error - example should be defined");
+
+			const html = await (await fetch(`${example.url}/readdir`)).text();
+
+			const document = new JSDOM(html).window.document;
+
+			const renderedReaddirFiles = document
+				.querySelector('[test-id="readdir-error-/my-assets"]')
+				?.textContent?.trim();
+			assert.strictEqual(
+				renderedReaddirFiles,
+				"ENOENT: no such file or directory, scandir '/my-assets'"
+			);
+		});
+
+		it("errors on files", async () => {
+			assert(example, "testing error - example should be defined");
+
+			const html = await (await fetch(`${example.url}/readdir`)).text();
+
+			const document = new JSDOM(html).window.document;
+
+			const renderedReaddirFiles = document
+				.querySelector('[test-id="readdir-error-/public/file1.md"]')
+				?.textContent?.trim();
+			assert.strictEqual(
+				renderedReaddirFiles,
+				"ENOTDIR: not a directory, scandir '/public/file1.md'"
+			);
 		});
 	});
 
@@ -76,7 +111,7 @@ describe("node:fs", () => {
 
 describe("node:fs/promises", () => {
 	describe("readdir", () => {
-		it("works as intended", async () => {
+		it("lists the content of an existing directory", async () => {
 			assert(example, "testing error - example should be defined");
 
 			const html = await (
@@ -85,16 +120,53 @@ describe("node:fs/promises", () => {
 
 			const document = new JSDOM(html).window.document;
 
-			const renderedReaddirFiles = [
-				...document.querySelectorAll(
-					'[test-id^="promises-readdir-public-list-file-"]'
-				),
-			].map((li) => li.textContent?.trim());
-			assert.deepStrictEqual(renderedReaddirFiles, [
-				"dir (which is a directory)",
-				"file1.md (which is a file)",
-				"file2.md (which is a file)",
-			]);
+			const renderedReaddirFiles = document
+				.querySelector('[test-id="promises-readdir-content-/public"]')
+				?.textContent?.trim();
+			assert.strictEqual(
+				renderedReaddirFiles,
+				[
+					"dir (which is a directory)",
+					"file1.md (which is a file)",
+					"file2.md (which is a file)",
+				].join("")
+			);
+		});
+
+		it("errors on non-existing directories", async () => {
+			assert(example, "testing error - example should be defined");
+
+			const html = await (
+				await fetch(`${example.url}/promises/readdir`)
+			).text();
+
+			const document = new JSDOM(html).window.document;
+
+			const renderedReaddirFiles = document
+				.querySelector('[test-id="promises-readdir-error-/my-assets"]')
+				?.textContent?.trim();
+			assert.strictEqual(
+				renderedReaddirFiles,
+				"ENOENT: no such file or directory, scandir '/my-assets'"
+			);
+		});
+
+		it("errors on files", async () => {
+			assert(example, "testing error - example should be defined");
+
+			const html = await (
+				await fetch(`${example.url}/promises/readdir`)
+			).text();
+
+			const document = new JSDOM(html).window.document;
+
+			const renderedReaddirFiles = document
+				.querySelector('[test-id="promises-readdir-error-/public/file1.md"]')
+				?.textContent?.trim();
+			assert.strictEqual(
+				renderedReaddirFiles,
+				"ENOTDIR: not a directory, scandir '/public/file1.md'"
+			);
 		});
 	});
 
@@ -139,6 +211,13 @@ describe("node:fs/promises", () => {
 			assert.strictEqual(
 				file3Content,
 				"ENOENT: no such file or directory, open '/public/file3.md'"
+			);
+			const fileOutsideOfPublicDirContent = document
+				.querySelector('[test-id="promises-readfile-error-/my-assets/file.md"]')
+				?.textContent?.trim();
+			assert.strictEqual(
+				fileOutsideOfPublicDirContent,
+				"ENOENT: no such file or directory, open '/my-assets/file.md'"
 			);
 		});
 

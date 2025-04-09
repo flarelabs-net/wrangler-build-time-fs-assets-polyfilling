@@ -20,16 +20,23 @@ export function readdir(
 
 	try {
 		const targetDirent = __findInDirentLikes(`${path}`);
+
+		if (!targetDirent) {
+			throw new Error(`ENOENT: no such file or directory, scandir '${path}'`);
+		}
+
+		if (targetDirent.type !== "directory") {
+			throw new Error(`ENOTDIR: not a directory, scandir '${path}'`);
+		}
+
 		const results =
-			!targetDirent || targetDirent.type !== "directory"
-				? []
-				: // eslint-disable-next-line @typescript-eslint/no-explicit-any
-					targetDirent.children.map((c: any) => ({
-						name: c.name,
-						parentPath: c.parentPath,
-						path: c.path,
-						isFile: () => c.type === "file",
-						isDirectory: () => c.type === "directory",
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			targetDirent.children.map((child: any) => ({
+				name: child.name,
+				parentPath: child.parentPath,
+				path: child.path,
+				isFile: () => child.type === "file",
+				isDirectory: () => child.type === "directory",
 					}));
 
 		callback?.(null, results);
@@ -53,7 +60,7 @@ export function __findInDirentLikes(path: string) {
 	const manifest = getManifest(paths[0]);
 
 	if (!manifest) {
-		throw new Error("Assets Manifest not found");
+		return null;
 	}
 
 	return recursivelyFindInDirentLikes(paths, manifest);

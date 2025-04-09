@@ -8,6 +8,7 @@ export async function getPageResponse() {
 		"/public/dir/file3.md",
 		"/public",
 		"/public/file3.md",
+		"/my-assets/file.md",
 	];
 
 	const reads = await Promise.all(
