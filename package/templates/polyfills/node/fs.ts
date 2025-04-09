@@ -1,4 +1,4 @@
-import promises from "node:fs/promises";
+import promises from "./fs/promises";
 import type fs from "node:fs";
 
 // @ts-expect-error -- this is solved at runtime
