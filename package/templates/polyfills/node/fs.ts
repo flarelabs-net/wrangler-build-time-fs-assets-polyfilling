@@ -1,5 +1,5 @@
-import promises from "fs/promises";
-import type fs from "fs";
+import promises from "node:fs/promises";
+import type fs from "node:fs";
 
 // @ts-expect-error -- this is solved at runtime
 import * as manifestIndex from "../../manifests/index.mjs";
