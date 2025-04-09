@@ -1,6 +1,6 @@
 import { access, cp, mkdir, readdir, writeFile } from "node:fs/promises";
 import { basename, dirname, join } from "node:path";
-import { baseOutputAssetsDir, baseOutputManifestsDir } from "./dirs";
+import { baseOutputManifestsDir } from "./dirs";
 
 export async function validateAssets(assets: string[]): Promise<void> {
 	for (const asset of assets) {
@@ -33,29 +33,48 @@ function generateDirentLikeBase(
 	};
 }
 
-export async function collectAndCopyAssets(path: string): Promise<void> {
-	if (path.startsWith("./")) {
-		path = path.slice("./".length);
+export async function collectAndCopyAllAssets(
+	assetsPaths: string[],
+	assetsOutputDir: string | null
+): Promise<void> {
+	if (assetsOutputDir) {
+		await mkdir(assetsOutputDir, { recursive: true });
+	}
+	for (const assetsPath of assetsPaths) {
+		await collectAndCopyAssets(assetsPath, assetsOutputDir);
+	}
+}
+
+async function collectAndCopyAssets(
+	assetsPath: string,
+	assetsOutputDir: string | null
+): Promise<void> {
+	if (assetsPath.startsWith("./")) {
+		assetsPath = assetsPath.slice("./".length);
 	}
 
-	if (path.includes("/")) {
+	if (assetsPath.includes("/")) {
 		// TODO: add support for this
 		throw new Error("Nested paths as assets not supported");
 	}
 
-	await cp(path, join(baseOutputAssetsDir, path), {
-		recursive: true,
-		force: true,
-	});
+	if (assetsOutputDir) {
+		await cp(assetsPath, join(assetsOutputDir, assetsPath), {
+			recursive: true,
+			force: true,
+		});
+	}
 
-	const manifestOutputFilepath = `${baseOutputManifestsDir}/${dirname(path)}/${basename(path)}.mjs`;
+	const manifestOutputFilepath = `${baseOutputManifestsDir}/${dirname(assetsPath)}/${basename(assetsPath)}.mjs`;
 
-	const pagesChildren = await collectDirChildren(path);
+	const pagesChildren = await collectDirChildren(assetsPath);
 	await mkdir(dirname(manifestOutputFilepath), {
 		recursive: true,
 	});
 
-	const direntLike = [generateDirentLikeBase(path.split("/"), pagesChildren)];
+	const direntLike = [
+		generateDirentLikeBase(assetsPath.split("/"), pagesChildren),
+	];
 
 	await writeFile(
 		manifestOutputFilepath,

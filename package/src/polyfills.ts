@@ -4,18 +4,28 @@ import { baseOutputPolyfillsDir } from "./dirs";
 
 const polyfillTemplatesDir = `${__dirname}/../templates/polyfills`;
 
-export async function savePolyfills() {
+export async function savePolyfills(numberOfAssetsDirs: number) {
 	await mkdir(`${baseOutputPolyfillsDir}/node`, { recursive: true });
 
 	await copyTemplateFileOver("node/fs.ts");
-	await copyTemplateFileOver("node/fs/promises.ts");
+	await copyTemplateFileOver("node/fs/promises.ts", (fileContent) => {
+		// Note: we should update occurrences of `ASSETS` with the name of the user's assets
+		//       binding (if different from `ASSETS`) (if we end up parsing
+		//       the user's wrangler config file)
+		if (numberOfAssetsDirs > 1) {
+			return fileContent.replace(
+				"const addSlashPrefix = true;",
+				"const addSlashPrefix = false;"
+			);
+		}
+		return fileContent;
+	});
 }
 
-// Note: I am not using `cp` from `node:fs` just because I think we might want
-//       need to tweak the template files on build at some point, for example
-//       replacing occurrences of `ASSETS` with the name of the user's assets
-//       binding (if different from `ASSETS`)
-async function copyTemplateFileOver(templatePath: string): Promise<void> {
+async function copyTemplateFileOver(
+	templatePath: string,
+	updateContent: (fileContent: string) => string = (str) => str
+): Promise<void> {
 	const templateContent = await readFile(
 		`${polyfillTemplatesDir}/${templatePath}`,
 		"utf8"
@@ -24,5 +34,6 @@ async function copyTemplateFileOver(templatePath: string): Promise<void> {
 	const outputFilePath = `${baseOutputPolyfillsDir}/${templatePath}`;
 
 	await mkdir(dirname(outputFilePath), { recursive: true });
-	await writeFile(outputFilePath, templateContent, "utf8");
+	const updatedTemplateContent = updateContent(templateContent);
+	await writeFile(outputFilePath, updatedTemplateContent, "utf8");
 }

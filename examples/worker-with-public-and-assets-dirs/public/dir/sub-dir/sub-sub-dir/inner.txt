@@ -1,0 +1,1 @@
+I am inside public / dir / sub-dir / sub-sub-dir, I'm quite nested aren't I?

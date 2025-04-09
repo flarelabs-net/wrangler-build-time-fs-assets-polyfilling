@@ -1,6 +1,6 @@
 import { rm } from "node:fs/promises";
 import { getArgs } from "./args";
-import { collectAndCopyAssets, validateAssets } from "./assets";
+import { collectAndCopyAllAssets, validateAssets } from "./assets";
 import { baseOutputDir } from "./dirs";
 import { savePolyfills } from "./polyfills";
 import { generateManifestsIndex } from "./manifests";
@@ -16,6 +16,7 @@ async function main() {
 	const args = getArgs();
 
 	const assetsPaths = args.assets;
+	const assetsOutputDir = args.assetsOutputDir;
 
 	// TODO: check existence of wrangler.toml/json/jsonc (maybe)
 	// and validate that there is an assets binding and get its name to use
@@ -25,13 +26,11 @@ async function main() {
 
 	await rm(baseOutputDir, { force: true, recursive: true });
 
-	for (const assetsPath of assetsPaths) {
-		await collectAndCopyAssets(assetsPath);
-	}
+	await collectAndCopyAllAssets(assetsPaths, assetsOutputDir);
 
 	await generateManifestsIndex();
 
-	await savePolyfills();
+	await savePolyfills(assetsPaths.length);
 }
 
 main();

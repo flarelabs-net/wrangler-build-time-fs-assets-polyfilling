@@ -1,0 +1,11 @@
+{
+	"name": "@examples/worker-with-public-and-assets-dir",
+	"private": true,
+	"scripts": {
+		"dev": "wrangler dev"
+	},
+	"devDependencies": {
+		"@dario-hacking/wrangler-build-time-fs-assets-polyfilling": "../../package",
+		"wrangler": "^4.8.0"
+	}
+}

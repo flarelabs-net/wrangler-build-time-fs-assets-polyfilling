@@ -11,12 +11,7 @@ export function readdir(
 	...args: Parameters<typeof fs.readdir>
 ): ReturnType<typeof fs.readdir> {
 	const [path, options, callback] = args;
-	const withFileTypes = !!options.withFileTypes;
-
-	if (!withFileTypes) {
-		// TODO: support readdir with withFileTypes false too
-		throw new Error("fs#readdir please call readdir with withFileTypes true");
-	}
+	const withFileTypes = !!options?.withFileTypes;
 
 	try {
 		const targetDirent = __findInDirentLikes(`${path}`);
@@ -31,13 +26,19 @@ export function readdir(
 
 		const results =
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			targetDirent.children.map((child: any) => ({
-				name: child.name,
-				parentPath: child.parentPath,
-				path: child.path,
-				isFile: () => child.type === "file",
-				isDirectory: () => child.type === "directory",
-			}));
+			targetDirent.children.map((child: any) => {
+				if (!withFileTypes) {
+					return child.name;
+				}
+
+				return {
+					name: child.name,
+					parentPath: child.parentPath,
+					path: child.path,
+					isFile: () => child.type === "file",
+					isDirectory: () => child.type === "directory",
+				};
+			});
 
 		callback?.(null, results);
 	} catch (err) {

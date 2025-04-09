@@ -1,0 +1,20 @@
+{
+	"$schema": "../../node_modules/wrangler/config-schema.json",
+	"name": "worker-with-public-and-assets-dir",
+	"main": "src/index.js",
+	"compatibility_date": "2025-04-07",
+	"compatibility_flags": ["nodejs_compat"],
+	"assets": {
+		"binding": "ASSETS",
+		"directory": "dist/assets",
+	},
+	"build": {
+		// let the build command build out polyfills
+		"command": "wrangler-build-time-fs-assets-polyfilling --assets ./public --assets assets --assets-output-dir dist/assets",
+	},
+	// TODO: the package should automatically populate these or at least validate the wrangle config for the user?
+	"alias": {
+		"node:fs": "./.wrangler/fs-assets-polyfilling/polyfills/node/fs.ts",
+		"node:fs/promises": "./.wrangler/fs-assets-polyfilling/polyfills/node/fs/promises.ts",
+	},
+}

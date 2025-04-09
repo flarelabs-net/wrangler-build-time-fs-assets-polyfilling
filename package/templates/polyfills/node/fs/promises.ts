@@ -29,8 +29,13 @@ export async function readFile(
 		throw new Error("EISDIR: illegal operation on a directory, read");
 	}
 
+	// Important: the following assignment is updated at build time, `/` is needed
+	//            when there is only a single assets directory, when there are more
+	//            it needs not to be
+	const addSlashPrefix = true;
+
 	// Note: we only care about the url's path, the domain is not relevant here
-	const url = new URL(`/${path}`, "http://0.0.0.0");
+	const url = new URL(`${addSlashPrefix ? "/" : ""}${path}`, "http://0.0.0.0");
 	// @ts-ignore
 	const env = (await import("cloudflare:workers")).env;
 	const response = await env.ASSETS.fetch(url);
