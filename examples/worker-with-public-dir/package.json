@@ -2,7 +2,6 @@
 	"name": "@examples/worker-with-public-dir",
 	"private": true,
 	"scripts": {
-		"predev": "wrangler-build-time-fs-assets-polyfilling --assets ./public",
 		"dev": "wrangler dev"
 	},
 	"devDependencies": {

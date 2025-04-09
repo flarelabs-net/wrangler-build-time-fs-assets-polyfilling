@@ -1,12 +1,16 @@
 {
-	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "cwbtfap-test",
+	"$schema": "../../node_modules/wrangler/config-schema.json",
+	"name": "worker-with-public-dir",
 	"main": "src/index.js",
 	"compatibility_date": "2025-04-07",
 	"compatibility_flags": ["nodejs_compat"],
 	"assets": {
 		"binding": "ASSETS",
 		"directory": "./public",
+	},
+	"build": {
+		// let the build command build out polyfills
+		"command": "wrangler-build-time-fs-assets-polyfilling --assets ./public",
 	},
 	// TODO: the package should automatically populate these or at least validate the wrangle config for the user?
 	"alias": {
