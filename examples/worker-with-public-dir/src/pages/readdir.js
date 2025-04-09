@@ -9,9 +9,9 @@ export async function getReaddirPageResponse() {
 	});
 
 	return getHtmlResponse(
-		"exist",
+		"readdir from node:fs",
 		`
-			<h1><code>readdir</code></h1>
+			<h1><code>readdir</code> from <code>node:fs</code></h1>
 			<p><code>readdir</code> run against <code>'/public'</code> results in: </p>
 			<ul>
 				${publicFiles.map((file, i) => `<li test-id="readdir-public-list-file-${i}">${file.name} (which is a ${file.isFile() ? "file" : "directory"})</li>`).join("")}
