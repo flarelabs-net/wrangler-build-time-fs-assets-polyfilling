@@ -23,8 +23,10 @@ export async function runExample(exampleName: string): Promise<Example> {
 				resolve({
 					url,
 					kill: () => {
-						assert(child.pid);
-						process.kill(child.pid);
+						child.kill();
+						child.stdout.destroy();
+						child.stderr.destroy();
+						child.stdin.destroy();
 					},
 				});
 			}
