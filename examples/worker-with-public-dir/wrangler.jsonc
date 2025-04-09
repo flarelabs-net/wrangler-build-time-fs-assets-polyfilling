@@ -8,7 +8,7 @@
 		"binding": "ASSETS",
 		"directory": "./public",
 	},
-	// TODO: the package should automatically populate these
+	// TODO: the package should automatically populate these or at least validate the wrangle config for the user?
 	"alias": {
 		"node:fs": "./.wrangler/fs-assets-polyfilling/polyfills/node/fs.ts",
 		"node:fs/promises": "./.wrangler/fs-assets-polyfilling/polyfills/node/fs/promises.ts",
