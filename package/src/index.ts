@@ -1,6 +1,6 @@
 import { rm } from "node:fs/promises";
 import { getArgs } from "./args";
-import { collectAndCopyAllAssets, validateAssets } from "./assets";
+import { handleAllAssets } from "./assets";
 import { baseOutputDir } from "./dirs";
 import { generatePolyfills } from "./polyfills";
 import { generateManifestsIndex } from "./manifests";
@@ -20,11 +20,9 @@ async function main(): Promise<void> {
 	// and validate that there is an assets binding and get its name to use
 	// in the polyfills?
 
-	await validateAssets(assetsPaths);
-
 	await rm(baseOutputDir, { force: true, recursive: true });
 
-	await collectAndCopyAllAssets(assetsPaths, assetsOutputDir);
+	await handleAllAssets(assetsPaths, assetsOutputDir);
 
 	await generateManifestsIndex();
 
