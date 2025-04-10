@@ -2,7 +2,12 @@ import { glob } from "node:fs";
 import { baseOutputManifestsDir } from "./dirs";
 import { writeFile } from "node:fs/promises";
 
-export async function generateManifestsIndex() {
+/**
+ * Generates an `index.mjs` in the manifests output directory that exports
+ * a `getManifest(path)` function that can be used to obtain a specific
+ * directory manifest
+ */
+export async function generateManifestsIndex(): Promise<void> {
 	const baseOutputManifestsDirWithoutPrefix = baseOutputManifestsDir.replace(
 		/^.\//,
 		""

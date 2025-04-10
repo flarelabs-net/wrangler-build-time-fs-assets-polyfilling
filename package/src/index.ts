@@ -2,11 +2,11 @@ import { rm } from "node:fs/promises";
 import { getArgs } from "./args";
 import { collectAndCopyAllAssets, validateAssets } from "./assets";
 import { baseOutputDir } from "./dirs";
-import { savePolyfills } from "./polyfills";
+import { generatePolyfills } from "./polyfills";
 import { generateManifestsIndex } from "./manifests";
 import { version } from "../package.json";
 
-async function main() {
+async function main(): Promise<void> {
 	console.log(
 		`\x1b[35m🛠️  Setting up Wrangler fs polyfills (v${version})\n\n\x1b[0m`
 	);
@@ -28,7 +28,7 @@ async function main() {
 
 	await generateManifestsIndex();
 
-	await savePolyfills(assetsPaths.length);
+	await generatePolyfills(assetsPaths.length);
 }
 
 main();

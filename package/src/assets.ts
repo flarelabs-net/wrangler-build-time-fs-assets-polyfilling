@@ -2,9 +2,14 @@ import { access, cp, mkdir, readdir, writeFile } from "node:fs/promises";
 import { basename, dirname, join } from "node:path";
 import { baseOutputManifestsDir } from "./dirs";
 
-export async function validateAssets(assets: string[]): Promise<void> {
-	for (const asset of assets) {
-		await access(asset);
+/**
+ * Ensures that all specified asset directories exists and are accessible.
+ *
+ * @param assetsPaths array of all the various assets paths requested by the user
+ */
+export async function validateAssets(assetsPaths: string[]): Promise<void> {
+	for (const path of assetsPaths) {
+		await access(path);
 	}
 }
 

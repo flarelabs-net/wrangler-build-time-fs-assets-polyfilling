@@ -20,6 +20,7 @@ export default defineConfig([
 		files: ["**/*.ts"],
 		rules: {
 			"@typescript-eslint/ban-ts-comment": "off",
+			"@typescript-eslint/explicit-function-return-type": "error",
 		},
 	},
 ]);

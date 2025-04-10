@@ -1,5 +1,11 @@
 import { parseArgs } from "node:util";
 
+/**
+ * Gets the CLI arguments passed to the bin command.
+ * This function also performs validation and can throw if some arguments are invalid.
+ *
+ * @returns the arguments
+ */
 export function getArgs(): {
 	assets: string[];
 	assetsOutputDir: string | null;

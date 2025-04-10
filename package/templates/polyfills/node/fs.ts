@@ -39,8 +39,8 @@ export function readdir(
 					name: child.name,
 					parentPath: child.parentPath,
 					path: child.path,
-					isFile: () => child.type === "file",
-					isDirectory: () => child.type === "directory",
+					isFile: (): boolean => child.type === "file",
+					isDirectory: (): boolean => child.type === "directory",
 				};
 			});
 
@@ -56,7 +56,8 @@ export function readdir(
 	}
 }
 
-export function __findInDirentLikes(path: string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function __findInDirentLikes(path: string): any {
 	// remove the potential leading `/`
 	if (path.startsWith("/")) path = path.slice(1);
 
@@ -69,8 +70,12 @@ export function __findInDirentLikes(path: string) {
 	}
 
 	return recursivelyFindInDirentLikes(paths, manifest);
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	function recursivelyFindInDirentLikes(paths: string[], direntLikes: any[]) {
+	function recursivelyFindInDirentLikes(
+		paths: string[],
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		direntLikes: any[]
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	): any {
 		const [current, ...restOfPaths] = paths;
 		const found = direntLikes.find((item) => item.name === current);
 		if (!found) return null;
@@ -96,11 +101,12 @@ export function existsSync(
 	return result;
 }
 
-function existsImpl(path: fs.PathLike) {
+function existsImpl(path: fs.PathLike): boolean {
 	return !!__findInDirentLikes(`${path}`);
 }
 
-export function realpathSync() {
+export function realpathSync(): boolean {
+	// TODO: implement this properly
 	return true;
 }
 
