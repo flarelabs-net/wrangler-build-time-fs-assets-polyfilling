@@ -1,4 +1,4 @@
-import fsPolyfill, { __findInDirentLikes } from "../fs";
+import fsPolyfill, { __findInDirent } from "../fs";
 import type fsPromises from "node:fs/promises";
 
 export async function readdir(
@@ -21,11 +21,11 @@ export async function readdir(
 export async function readFile(
 	path: string
 ): ReturnType<typeof fsPromises.readFile> {
-	const direntLike = __findInDirentLikes(path);
-	if (!direntLike) {
+	const dirent = __findInDirent(path);
+	if (!dirent) {
 		throw new Error(`ENOENT: no such file or directory, open '${path}'`);
 	}
-	if (direntLike.type === "directory") {
+	if (dirent.type === "directory") {
 		throw new Error("EISDIR: illegal operation on a directory, read");
 	}
 

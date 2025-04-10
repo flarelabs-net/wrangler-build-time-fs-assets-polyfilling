@@ -1,11 +1,16 @@
 import type fs from "node:fs";
 import promises from "./fs/promises";
 
+import type {
+	SerializableDirent,
+	SerializableDirentDirectory,
+} from "../../../src/assets";
+
 // @ts-expect-error -- this is solved at runtime
 import * as manifestIndex from "../../manifests/index.mjs";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getManifest: (path: string) => any[] = manifestIndex.getManifest;
+const getManifest: (path: string) => null | SerializableDirentDirectory[] =
+	manifestIndex.getManifest;
 
 export function readdir(
 	...args: Parameters<typeof fs.readdir>
@@ -18,7 +23,7 @@ export function readdir(
 	const withFileTypes = !!options?.withFileTypes;
 
 	try {
-		const targetDirent = __findInDirentLikes(`${path}`);
+		const targetDirent = __findInDirent(`${path}`);
 
 		if (!targetDirent) {
 			throw new Error(`ENOENT: no such file or directory, scandir '${path}'`);
@@ -28,23 +33,21 @@ export function readdir(
 			throw new Error(`ENOTDIR: not a directory, scandir '${path}'`);
 		}
 
-		const results =
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			targetDirent.children.map((child: any) => {
-				if (!withFileTypes) {
-					return child.name;
-				}
+		const results = targetDirent.children.map((child) => {
+			if (!withFileTypes) {
+				return child.name;
+			}
 
-				return {
-					name: child.name,
-					parentPath: child.parentPath,
-					path: child.path,
-					isFile: (): boolean => child.type === "file",
-					isDirectory: (): boolean => child.type === "directory",
-				};
-			});
+			return {
+				name: child.name,
+				parentPath: child.parentPath,
+				path: child.parentPath,
+				isFile: (): boolean => child.type === "file",
+				isDirectory: (): boolean => child.type === "directory",
+			};
+		});
 
-		callback?.(null, results);
+		callback?.(null, results as fs.Dirent[]);
 	} catch (err) {
 		if (err instanceof Error && err.message === "Assets Manifest not found") {
 			return callback?.(
@@ -56,8 +59,7 @@ export function readdir(
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function __findInDirentLikes(path: string): any {
+export function __findInDirent(path: string): null | SerializableDirent {
 	// remove the potential leading `/`
 	if (path.startsWith("/")) path = path.slice(1);
 
@@ -69,19 +71,17 @@ export function __findInDirentLikes(path: string): any {
 		return null;
 	}
 
-	return recursivelyFindInDirentLikes(paths, manifest);
-	function recursivelyFindInDirentLikes(
+	return recursivelyFindInDirent(paths, manifest);
+	function recursivelyFindInDirent(
 		paths: string[],
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		direntLikes: any[]
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	): any {
+		dirents: SerializableDirent[]
+	): null | SerializableDirent {
 		const [current, ...restOfPaths] = paths;
-		const found = direntLikes.find((item) => item.name === current);
+		const found = dirents.find((dirent) => dirent.name === current);
 		if (!found) return null;
 		if (restOfPaths.length === 0) return found;
 		if (found.type !== "directory") return null;
-		return recursivelyFindInDirentLikes(restOfPaths, found.children);
+		return recursivelyFindInDirent(restOfPaths, found.children);
 	}
 }
 
@@ -102,7 +102,7 @@ export function existsSync(
 }
 
 function existsImpl(path: fs.PathLike): boolean {
-	return !!__findInDirentLikes(`${path}`);
+	return !!__findInDirent(`${path}`);
 }
 
 export function realpathSync(): boolean {
