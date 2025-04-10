@@ -2,7 +2,7 @@ import { glob } from "node:fs";
 import { writeFile, mkdir } from "node:fs/promises";
 import { basename, dirname } from "node:path";
 import { baseOutputManifestsDir } from "./dirs";
-import type { DirentLikeDir } from "./assets";
+import type { SerializableDirentDirectory } from "./assets";
 
 /**
  * Generates an `index.mjs` in the manifests output directory that exports
@@ -49,15 +49,16 @@ export async function generateManifestsIndex(): Promise<void> {
 }
 
 /**
- * Given the assets path and the dirent-like object describing it, generates an assets manifest file for it
- * which exports as default an array of the directory's dirent-like-dir object
+ * Given the assets path and the serializable dirent object describing it,
+ * generates an assets manifest file for it which exports as default an
+ * array which only element is the serialized dirent object
  *
  * @param assetsPath the path of the assets directory
- * @param direntLikeDir the dirent-like-dir object representing the directory
+ * @param directoryDirent the serializable dirent object representing the directory
  */
 export async function generateAssetsManifest(
 	assetsPath: string,
-	direntLikeDir: DirentLikeDir
+	directoryDirent: SerializableDirentDirectory
 ): Promise<void> {
 	const manifestOutputFilepath = `${baseOutputManifestsDir}/${dirname(assetsPath)}/${basename(assetsPath)}.mjs`;
 
@@ -67,6 +68,6 @@ export async function generateAssetsManifest(
 
 	await writeFile(
 		manifestOutputFilepath,
-		`export default ${JSON.stringify([direntLikeDir])}`
+		`export default ${JSON.stringify([directoryDirent])}`
 	);
 }

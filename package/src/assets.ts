@@ -57,22 +57,22 @@ async function handleAssetPath(
 
 	const pagesChildren = await collectDirChildren(assetsPath);
 
-	const direntLike = generateValidDirentLike(
+	const directoryDirent = generateDirentDirent(
 		assetsPath.split("/"),
 		pagesChildren
 	);
 
-	await generateAssetsManifest(assetsPath, direntLike);
+	await generateAssetsManifest(assetsPath, directoryDirent);
 }
 
 /**
- * Collects all dirent-like objects for the all the files and directories (recursively)
- * in a specified directory.
+ * Collects all serializable dirent objects for the all the files and directories
+ * (recursively) in a specified directory.
  *
- * @param path the directory to collect the dirent-like objects from
- * @returns an array of dirent-like objects
+ * @param path the directory to collect the dirent objects from
+ * @returns an array of dirent objects
  */
-async function collectDirChildren(path: string): Promise<DirentLike[]> {
+async function collectDirChildren(path: string): Promise<SerializableDirent[]> {
 	const dirContent = await readdir(path, { withFileTypes: true });
 
 	return Promise.all(
@@ -94,12 +94,12 @@ async function collectDirChildren(path: string): Promise<DirentLike[]> {
 }
 
 /**
- * Generates a valid dirent-like object for the specified paths and children.
+ * Generates a valid dirent object for the specified paths and children.
  *
  * Example:
  *    - `paths` is [`public`, `assets`, `my-site`] (representing the `public/assets/my-site/` path)
  *    - `children` is <CHILDREN> (representing all the files and dirs inside `public/assets/my-site/`)
- *    This function returns a dirent-like-dir object with the roughly following structure:
+ *    This function returns a dirent object with roughly the following structure:
  *      {
  *        type: "directory",
  *        name: "public",
@@ -114,14 +114,14 @@ async function collectDirChildren(path: string): Promise<DirentLike[]> {
  *        }]
  *      }
  *
- * @param paths the paths to generate the dirent-like object for
- * @param children the children of the dirent-like object
- * @returns a valid dirent-like object
+ * @param paths the paths to generate the dirent object for
+ * @param children the children of the dirent object
+ * @returns a valid dirent object
  */
-function generateValidDirentLike(
+function generateDirentDirent(
 	paths: string[],
-	children: DirentLike[]
-): DirentLikeDir {
+	children: SerializableDirent[]
+): SerializableDirentDirectory {
 	if (paths.length === 0) {
 		throw new Error("Unexpected paths argument");
 	}
@@ -139,7 +139,7 @@ function generateValidDirentLike(
 		parentPath: paths[0],
 		type: "directory",
 		name: paths[0],
-		children: [generateValidDirentLike(paths.slice(1), children)],
+		children: [generateDirentDirent(paths.slice(1), children)],
 	};
 }
 
@@ -154,13 +154,15 @@ async function validateAssets(assetsPaths: string[]): Promise<void> {
 	}
 }
 
-type DirentLikeBase = Pick<nodeFs.Dirent, "name" | "parentPath">;
+type SerializableDirentBase = Pick<nodeFs.Dirent, "name" | "parentPath">;
 
-export type DirentLikeFile = DirentLikeBase & { type: "file" };
+export type SerializableDirentFile = SerializableDirentBase & { type: "file" };
 
-export type DirentLikeDir = DirentLikeBase & {
+export type SerializableDirentDirectory = SerializableDirentBase & {
 	type: "directory";
-	children: DirentLike[];
+	children: SerializableDirent[];
 };
 
-export type DirentLike = DirentLikeFile | DirentLikeDir;
+export type SerializableDirent =
+	| SerializableDirentFile
+	| SerializableDirentDirectory;
