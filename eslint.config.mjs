@@ -4,7 +4,7 @@ import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
-	globalIgnores(["**/dist/"]),
+	globalIgnores(["**/dist/", "**/.wrangler/"]),
 	{ files: ["**/*.{js,mjs,cjs,ts}"] },
 	{
 		files: ["**/*.{js,mjs,cjs,ts}"],
