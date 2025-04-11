@@ -3,7 +3,7 @@
 This monorepo contains the code for the `@flarelabs-net/wrangler-build-time-fs-assets-polyfilling`
 package.
 
-The package in a nutshell generates files at built time that define what static assets
+The package in a nutshell generates files at build time that define what static assets
 a Cloudflare worker has access to alongside fs polyfills that make sure to such files
 to provide support for some `fs` functions.
 
