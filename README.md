@@ -1,6 +1,6 @@
 # wrangler-build-time-fs-assets-polyfilling
 
-This monorepo contains the code for the `@dario-hacking/wrangler-build-time-fs-assets-polyfilling`
+This monorepo contains the code for the `@flarelabs-net/wrangler-build-time-fs-assets-polyfilling`
 package.
 
 The package in a nutshell generates files at built time that define what static assets

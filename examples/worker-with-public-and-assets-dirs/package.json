@@ -5,7 +5,7 @@
 		"dev": "wrangler dev"
 	},
 	"devDependencies": {
-		"@dario-hacking/wrangler-build-time-fs-assets-polyfilling": "../../package",
+		"@flarelabs-net/wrangler-build-time-fs-assets-polyfilling": "../../package",
 		"wrangler": "^4.8.0"
 	}
 }

@@ -11,7 +11,7 @@ A more proper documentation will be added later here if beneficial 🙂
 Install the package as a dev dependency:
 
 ```sh
-npm i -D @dario-hacking/wrangler-build-time-fs-assets-polyfilling
+npm i -D @flarelabs-net/wrangler-build-time-fs-assets-polyfilling
 ```
 
 The package can be run via `npx` and similar tools:
