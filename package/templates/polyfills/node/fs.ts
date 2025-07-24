@@ -9,8 +9,9 @@ import type {
 // @ts-expect-error -- this is solved at runtime
 import * as manifestIndex from "../../manifests/index.mjs";
 
-const getManifest: (path: string) => null | SerializableDirentDirectory[] =
-	manifestIndex.getManifest;
+export const getManifest: (
+	path: string
+) => null | SerializableDirentDirectory[] = manifestIndex.getManifest;
 
 export function readdir(
 	...args: Parameters<typeof fs.readdir>
