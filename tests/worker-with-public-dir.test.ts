@@ -231,4 +231,60 @@ describe("node:fs/promises", () => {
 			);
 		});
 	});
+
+	describe("glob", () => {
+		it("can perform simple recursive searches on for a specific extension", async () => {
+			assert(example, "testing error - example should be defined");
+
+			const html = await (await fetch(`${example.url}/promises/glob`)).text();
+
+			const document = new JSDOM(html).window.document;
+
+			const mdPublicContent = document
+				.querySelector('[test-id="glob-content-**/*.md-public"]')
+				?.textContent?.trim();
+			assert.strictEqual(
+				mdPublicContent,
+				["file1.md", "file2.md", "dir/file3.md"].join("")
+			);
+			const mdPublicDirContent = document
+				.querySelector('[test-id="glob-content-**/*.md-public/dir"]')
+				?.textContent?.trim();
+			assert.strictEqual(mdPublicDirContent, ["file3.md"].join(""));
+		});
+
+		it("can perform simple recursive searches on for a specific extension wrapped in curly braces", async () => {
+			assert(example, "testing error - example should be defined");
+
+			const html = await (await fetch(`${example.url}/promises/glob`)).text();
+
+			const document = new JSDOM(html).window.document;
+
+			const txtPublicContent = document
+				.querySelector('[test-id="glob-content-**/*.{txt}-public/dir"]')
+				?.textContent?.trim();
+			assert.strictEqual(
+				txtPublicContent,
+				["file4.txt", "inner-dir/inner-inner-dir/file5.txt"].join("")
+			);
+		});
+
+		it("can perform simple recursive searches on for a set of extensions", async () => {
+			assert(example, "testing error - example should be defined");
+
+			const html = await (await fetch(`${example.url}/promises/glob`)).text();
+
+			const document = new JSDOM(html).window.document;
+
+			const mdPublicContent = document
+				.querySelector('[test-id="glob-content-**/*.{md,txt}-public/dir"]')
+				?.textContent?.trim();
+			assert.strictEqual(
+				mdPublicContent,
+				["file3.md", "file4.txt", "inner-dir/inner-inner-dir/file5.txt"].join(
+					""
+				)
+			);
+		});
+	});
 });

@@ -21,6 +21,10 @@ const fsFunctions = [
 		name: "promises/readFile",
 		getPageModule: () => import("./pages/promises/readFile"),
 	},
+	{
+		name: "promises/glob",
+		getPageModule: () => import("./pages/promises/glob"),
+	},
 ];
 
 export default {
